@@ -1,0 +1,281 @@
+{% extends 'accounts/dashboard.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid">
+  <h2 class="mb-4">Create or Update Your CV</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Row 1 -->
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <label for="id_full_name" class="form-label">Full Name (English)</label>
+        {{ form.full_name }}
+      </div>
+      <div class="col-md-3">
+        <label for="id_full_name_bn" class="form-label">Full Name (Bangla)</label>
+        {{ form.full_name_bn }}
+      </div>
+      
+
+      <div class="col-md-3">
+        <label for="id_blood_group" class="form-label">Blood Group</label>
+        {{ form.blood_group }}
+      </div>
+      <div class="col-md-3">
+        <div id="div_id_blood_group_other" style="display:none;">
+          <label for="id_blood_group_other" class="form-label">Blood Group Other</label>
+          {{ form.blood_group_other }}
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-12">
+          <label for="id_bio" class="form-label">Bio</label>
+          {{ form.bio }}
+        </div>
+      </div>
+
+    <!-- Row 2: Languages -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="id_languages" class="form-label">Languages</label>
+        {{ form.languages }}
+      </div>
+      <div class="col-md-6">
+        <div id="div_id_language_other" style="display:none;">
+          <label for="id_language_other" class="form-label">Other Languages</label>
+          {{ form.language_other }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <label for="id_email" class="form-label">Email</label>
+        {{ form.email }}
+      </div>
+      <div class="col-md-3">
+        <label for="id_date_of_birth" class="form-label">Date of Birth</label>
+        {{ form.date_of_birth }}
+      </div>
+      <div class="col-md-3">
+        <label for="id_nationality" class="form-label">Nationality</label>
+        {{ form.nationality }}
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+
+    <!-- Row 4: Addresses and checkbox -->
+    <div class="row mb-3 align-items-center">
+      <div class="col-md-5">
+        <label for="id_current_address" class="form-label">Current Address</label>
+        {{ form.current_address }}
+      </div>
+      <div class="col-md-2 d-flex align-items-center">
+        <div class="form-check mt-4">
+          {{ form.is_permanent_same_as_current }}
+          <label class="form-check-label" for="id_is_permanent_same_as_current">Is permanent same as current</label>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <label for="id_permanent_address" class="form-label">Permanent Address</label>
+        {{ form.permanent_address }}
+      </div>
+    </div>
+
+    <!-- Row 5: Father's info -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="id_fathers_name" class="form-label">Father's Name</label>
+        {{ form.fathers_name }}
+      </div>
+      <div class="col-md-4">
+        <label for="id_fathers_mobile" class="form-label">Father's Mobile</label>
+        {{ form.fathers_mobile }}
+      </div>
+      <div class="col-md-4">
+        <label for="id_fathers_nid" class="form-label">Father's NID</label>
+        {{ form.fathers_nid }}
+      </div>
+    </div>
+
+    <!-- Row 6: Mother's info -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="id_mothers_name" class="form-label">Mother's Name</label>
+        {{ form.mothers_name }}
+      </div>
+      <div class="col-md-4">
+        <label for="id_mothers_mobile" class="form-label">Mother's Mobile</label>
+        {{ form.mothers_mobile }}
+      </div>
+      <div class="col-md-4">
+        <label for="id_mothers_nid" class="form-label">Mother's NID</label>
+        {{ form.mothers_nid }}
+      </div>
+    </div>
+
+    <!-- Row 7: Gender, Married, Last Education -->
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <label for="id_gender" class="form-label">Gender</label>
+        {{ form.gender }}
+      </div>
+      <div class="col-md-3">
+        <label for="id_married" class="form-label">Married</label>
+        {{ form.married }}
+      </div>
+      <div class="col-md-3">
+        <label for="id_last_education" class="form-label">Last Education</label>
+        {{ form.last_education }}
+      </div>
+      <div class="col-md-3">
+        <div id="div_id_last_education_other" style="display:none;">
+          <label for="id_last_education_other" class="form-label">Last Education Other</label>
+          {{ form.last_education_other }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 8: Last education result, passing year, job status -->
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <label for="id_last_education_result" class="form-label">Last Education Result</label>
+        {{ form.last_education_result }}
+      </div>
+      <div class="col-md-3">
+        <label for="id_last_education_passing_year" class="form-label">Passing Year</label>
+        {{ form.last_education_passing_year }}
+      </div>
+      <div class="col-md-3">
+        <label for="id_current_job_status" class="form-label">Current Job Status</label>
+        {{ form.current_job_status }}
+      </div>
+      <div class="col-md-3">
+        <div id="div_id_current_job_status_other" style="display:none;">
+          <label for="id_current_job_status_other" class="form-label">Current Job Status Other</label>
+          {{ form.current_job_status_other }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 9: Current Job Title and Profile Picture -->
+    <div class="row mb-3">
+      <div id="div_id_current_job_title" class="col-md-6" style="display:none;">
+        <label for="id_current_job_title" class="form-label">Current Job Title</label>
+        {{ form.current_job_title }}
+      </div>
+      <div class="col-md-6">
+        <label for="id_profile_picture" class="form-label">Profile Picture</label>
+        {{ form.profile_picture }}
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Save CV</button>
+  </form>
+</div>
+{% endblock content %}
+
+{% block js_customs %}
+
+<!-- Include jQuery and Select2 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  function toggleField(selectId, otherFieldDivId, triggerValue) {
+    const selectEl = document.getElementById(selectId);
+    const otherFieldDiv = document.getElementById(otherFieldDivId);
+
+    if (!selectEl || !otherFieldDiv) return;
+
+    function updateVisibility() {
+      if (selectEl.value === triggerValue) {
+        otherFieldDiv.style.display = 'block';
+      } else {
+        otherFieldDiv.style.display = 'none';
+        const input = otherFieldDiv.querySelector('input, textarea');
+        if (input) input.value = '';
+      }
+    }
+
+    selectEl.addEventListener('change', updateVisibility);
+    updateVisibility();
+  }
+
+  // Blood Group 'Other'
+  toggleField('id_blood_group', 'div_id_blood_group_other', 'Other');
+
+  // Last Education 'Others'
+  toggleField('id_last_education', 'div_id_last_education_other', 'Others');
+
+  // Current Job Status 'Others'
+  toggleField('id_current_job_status', 'div_id_current_job_status_other', 'Others');
+
+  // Initialize Select2 for languages with tags enabled (allows adding new)
+  const languageSelect = $('#id_languages');
+  if (languageSelect.length) {
+    languageSelect.select2({
+      tags: true,
+      tokenSeparators: [',', ' '],
+      placeholder: 'Select or type languages',
+      allowClear: true,
+      width: '100%',
+    });
+  }
+
+  // Show/hide 'language_other' input if user types a new language that is not in options
+  languageSelect.on('change', function (event) {
+    const selectedValues = $(this).val() || [];
+    const selectElement = event.target;
+    const options = selectElement.options ? Array.from(selectElement.options).map(opt => opt.value) : [];
+
+    const hasNew = selectedValues.some(val => !options.includes(val));
+
+    const languageOtherDiv = document.getElementById('div_id_language_other');
+    if (languageOtherDiv) {
+      if (hasNew) {
+        languageOtherDiv.style.display = 'block';
+      } else {
+        languageOtherDiv.style.display = 'none';
+        const input = languageOtherDiv.querySelector('input, textarea');
+        if (input) input.value = '';
+      }
+    }
+  });
+
+  languageSelect.trigger('change');
+
+  // Show/hide Current Job Title based on current_job_status
+  const jobStatusSelect = document.getElementById('id_current_job_status');
+  const jobTitleDiv = document.getElementById('div_id_current_job_title');
+
+  if (jobStatusSelect && jobTitleDiv) {
+    function updateJobTitleVisibility() {
+      if (jobStatusSelect.value === 'Employed' || jobStatusSelect.value === 'Others') {
+        jobTitleDiv.style.display = 'block';
+      } else {
+        jobTitleDiv.style.display = 'none';
+        const inputTitle = jobTitleDiv.querySelector('input, textarea');
+        if (inputTitle) inputTitle.value = '';
+      }
+    }
+
+    jobStatusSelect.addEventListener('change', updateJobTitleVisibility);
+    updateJobTitleVisibility();
+  }
+
+});
+</script>
+
+
+
+
+{% endblock js_customs %}

@@ -1,0 +1,152 @@
+{% extends 'accounts/dashboard.html' %}
+{% block title %}Guest Dashboard{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <div class="card shadow-sm p-4">
+
+    <!-- PROFILE PICTURE and NAME centered -->
+    <div class="text-center mb-4">
+      {% if request.user.cv.profile_picture %}
+        <img src="{{ request.user.cv.profile_picture.url }}" alt="Profile Picture" class="rounded-circle mb-3" style="width: 180px; height: 180px; object-fit: cover;">
+      {% else %}
+        <div class="bg-secondary rounded-circle mb-3 d-inline-flex justify-content-center align-items-center" style="width: 180px; height: 180px;">
+          <span class="fs-1 text-white">N/A</span>
+        </div>
+      {% endif %}
+      <h2>{{ request.user.cv.full_name }}</h2>
+      {% if request.user.cv.full_name_bn %}
+      <p class="text-muted mb-1">{{ request.user.cv.full_name_bn }}</p>
+      {% endif %}
+      <p class="mb-0"><strong>Email:</strong> {{ request.user.cv.email }}</p>
+      <p><strong>Phone:</strong> {{ request.user.phone_number }}</p>
+    </div>
+
+    <!-- BIO -->
+    {% if request.user.cv.bio %}
+    <div class="mb-4">
+      <h5 class="border-bottom pb-2">Bio</h5>
+      <p>{{ request.user.cv.bio|linebreaksbr }}</p>
+    </div>
+    {% endif %}
+
+    <!-- PERSONAL INFORMATION -->
+    <div class="mb-4">
+      <h5 class="border-bottom pb-2">Personal Information</h5>
+      <dl class="row">
+        <dt class="col-sm-4">Date of Birth</dt>
+        <dd class="col-sm-8">{{ request.user.cv.date_of_birth }}</dd>
+
+        <dt class="col-sm-4">Nationality</dt>
+        <dd class="col-sm-8">{{ request.user.cv.nationality }}</dd>
+
+        <dt class="col-sm-4">Blood Group</dt>
+        <dd class="col-sm-8">
+          {{ request.user.cv.blood_group }}
+          {% if request.user.cv.blood_group == "Other" %}
+            ({{ request.user.cv.blood_group_other }})
+          {% endif %}
+        </dd>
+
+        <dt class="col-sm-4">Gender</dt>
+        <dd class="col-sm-8">{{ request.user.cv.gender }}</dd>
+
+        <dt class="col-sm-4">Languages</dt>
+        <dd class="col-sm-8">
+          {% if request.user.cv.languages.exists %}
+            {{ request.user.cv.languages.all|join:", " }}
+          {% else %}
+            None
+          {% endif %}
+          {% if request.user.cv.language_other %}
+            {% if request.user.cv.languages.exists %}, {% endif %}
+            {{ request.user.cv.language_other }}
+          {% endif %}
+        </dd>
+      </dl>
+    </div>
+
+    <!-- ADDRESSES -->
+    <div class="mb-4">
+      <h5 class="border-bottom pb-2">Addresses</h5>
+      <dl class="row">
+        <dt class="col-sm-4">Current Address</dt>
+        <dd class="col-sm-8"><pre class="bg-light p-2 rounded">{{ request.user.cv.current_address }}</pre></dd>
+
+        <dt class="col-sm-4">Permanent Address</dt>
+        <dd class="col-sm-8"><pre class="bg-light p-2 rounded">{{ request.user.cv.permanent_address }}</pre></dd>
+
+        <!-- <dt class="col-sm-4">Permanent same as Current</dt>
+        <dd class="col-sm-8">{{ request.user.cv.is_permanent_same_as_current|yesno:"Yes,No" }}</dd> -->
+      </dl>
+    </div>
+
+    <!-- FAMILY INFORMATION -->
+    <div class="mb-4">
+      <h5 class="border-bottom pb-2">Family Information</h5>
+      <dl class="row">
+        <dt class="col-sm-4">Father's Name</dt>
+        <dd class="col-sm-8">{{ request.user.cv.fathers_name }}</dd>
+
+        <dt class="col-sm-4">Father's Mobile</dt>
+        <dd class="col-sm-8">{{ request.user.cv.fathers_mobile }}</dd>
+
+        <dt class="col-sm-4">Father's NID</dt>
+        <dd class="col-sm-8">{{ request.user.cv.fathers_nid }}</dd>
+
+        <dt class="col-sm-4">Mother's Name</dt>
+        <dd class="col-sm-8">{{ request.user.cv.mothers_name }}</dd>
+
+        <dt class="col-sm-4">Mother's Mobile</dt>
+        <dd class="col-sm-8">{{ request.user.cv.mothers_mobile }}</dd>
+
+        <dt class="col-sm-4">Mother's NID</dt>
+        <dd class="col-sm-8">{{ request.user.cv.mothers_nid }}</dd>
+      </dl>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="mb-4">
+      <h5 class="border-bottom pb-2">Education</h5>
+      <dl class="row">
+        <dt class="col-sm-4">Last Education</dt>
+        <dd class="col-sm-8">
+          {{ request.user.cv.last_education }}
+          {% if request.user.cv.last_education == "Others" %}
+            ({{ request.user.cv.last_education_other }})
+          {% endif %}
+        </dd>
+
+        <dt class="col-sm-4">Result</dt>
+        <dd class="col-sm-8">{{ request.user.cv.last_education_result }}</dd>
+
+        <dt class="col-sm-4">Passing Year</dt>
+        <dd class="col-sm-8">{{ request.user.cv.last_education_passing_year }}</dd>
+      </dl>
+    </div>
+
+    <!-- JOB INFORMATION -->
+    <div class="mb-4">
+      <h5 class="border-bottom pb-2">Job Information</h5>
+      <dl class="row">
+        <dt class="col-sm-4">Current Job Status</dt>
+        <dd class="col-sm-8">
+          {{ request.user.cv.current_job_status }}
+          {% if request.user.cv.current_job_status == "Others" %}
+            ({{ request.user.cv.current_job_status_other }})
+          {% endif %}
+        </dd>
+
+        <dt class="col-sm-4">Current Job Title</dt>
+        <dd class="col-sm-8">{{ request.user.cv.current_job_title|default:"-" }}</dd>
+      </dl>
+    </div>
+
+    <!-- TIMESTAMPS -->
+    <small class="text-muted d-block text-center">
+      Created: {{ request.user.cv.created_at|date:"F j, Y, g:i a" }}<br>
+      Last updated: {{ request.user.cv.updated_at|date:"F j, Y, g:i a" }}
+    </small>
+  </div>
+</div>
+{% endblock %}
