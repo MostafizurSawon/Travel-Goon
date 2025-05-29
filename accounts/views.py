@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import User
 from .utils import generate_otp, generate_password, send_sms_bdbulksms
@@ -9,6 +9,8 @@ from datetime import timedelta
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from clients.models import PassportInfo, TravelAgencyCV
+
 
 import environ
 env = environ.Env()
@@ -114,6 +116,7 @@ def guest_otp_verify(request):
 
             # Login user
             login(request, user)
+            PassportInfo.objects.get_or_create(user=user)
 
             # Clear phone from session
             request.session.pop('guest_phone', None)
@@ -122,6 +125,8 @@ def guest_otp_verify(request):
         else:
             context = {'error': 'Invalid OTP'}
             return render(request, 'accounts/guest_otp_verify.html', context)
+        
+        
 
     return render(request, 'accounts/guest_otp_verify.html')
 
@@ -130,14 +135,14 @@ def guest_otp_verify(request):
 @login_required
 def guest_dashboard(request):
     if request.user.role != 'guest':
-        return redirect('homedemo')  # Prevent non-guests from accessing
+        return redirect('home')  # Prevent non-guests from accessing
     return render(request, 'accounts/guest_dashboard.html')
 
 
 @login_required
 def guest_change_password(request):
     if request.user.role != 'guest':
-        return redirect('homedemo')  # Redirect if not guest user
+        return redirect('home')  # Redirect if not guest user
 
     if request.method == 'POST':
         form = PasswordChangeForm(user=request.user, data=request.POST)
@@ -145,7 +150,7 @@ def guest_change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Keep user logged in
             messages.success(request, "Your password has been updated successfully.")
-            return redirect('accounts:guest_dashboard')
+            return redirect('accounts:dashboard')
         else:
             messages.error(request, "Please correct the errors below.")
     else:
@@ -157,7 +162,7 @@ def guest_change_password(request):
 @login_required
 def view_guest_cv(request):
     if request.user.role != 'guest':
-        return redirect('homedemo')
+        return redirect('home')
     return render(request, 'accounts/guest_cv.html')
 
 
@@ -167,25 +172,112 @@ def view_guest_cv(request):
 
 # Role Based
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+def role_based_login(request):
+    # Redirect if already logged in
+    if request.user.is_authenticated:
+        if request.user.role == 'hr':
+            return redirect('accounts:hr_dashboard')
+        elif request.user.role == 'admin':
+            return redirect('accounts:admin_dashboard')
+        else:
+            return redirect('accounts:guest_dashboard')  
+
+    if request.method == 'POST':
+        phone = request.POST.get('phone_number')
+        password = request.POST.get('password')
+
+        user = authenticate(request, phone_number=phone, password=password)
+
+        # Allow all except guests here
+        if user is not None and user.role != 'guest':
+            login(request, user)
+            print(user.role)
+            if request.user.role == 'hr':
+                return redirect('accounts:hr_dashboard')
+            elif request.user.role == 'admin':
+                return redirect('accounts:admin_dashboard')
+        else:
+            messages.error(request, "Invalid phone number or password for this login.")
+
+    return render(request, 'accounts/role_based_login.html')
 
 @login_required
-def dashboard(request):
-    user_role = request.user.role  # get role from user model
+def admin_dashboard(request):
+    if request.user.role == 'admin':
+        return render(request, 'accounts/admin_dashboard.html')
+    return redirect('home')
+
+
+
     
-    # You can customize the context or templates based on role
+@login_required
+def hr_dashboard(request):
+    if request.user.role != 'hr':
+        return redirect('home')
+    
+    
+    # HR dashboard logic here
+    return render(request, 'accounts/hr_dashboard.html')
+
+
+
+
+@login_required
+def hr_view_guests_passport(request):
+    # Ensure only HR users can access
+    if request.user.role != 'hr':
+        return redirect('home')  # or permission denied page
+
+    # Get all PassportInfo for users with role 'guest'
+    guest_passports = PassportInfo.objects.filter(user__role='guest')
+
     context = {
-        'role': user_role,
-        'user': request.user,
+        'guest_passports': guest_passports,
     }
-    
-    # Option 1: Use a single template and branch content inside template
-    return render(request, 'accounts/dashboard.html', context)
-    
-    # Option 2 (recommended if very different dashboards):
-    # if user_role == 'guest':
-    #     return render(request, 'accounts/guest_dashboard.html', context)
-    # elif user_role == 'admin':
-    #     return render(request, 'accounts/admin_dashboard.html', context)
-    # # Add more as needed
+    return render(request, 'hr/hr_guest_passports.html', context)
+
+
+@login_required
+def hr_guest_cvs_list(request):
+    if request.user.role != 'hr':
+        return redirect('home')  # or permission denied page
+    guest_cvs = TravelAgencyCV.objects.select_related('user').all()
+    return render(request, 'hr/hr_guest_cvs_list.html', {'guest_cvs': guest_cvs})
+
+
+
+
+@login_required
+def guest_cv_detail(request, pk):
+    if request.user.role != 'hr':
+        return redirect('home')  
+    cv = TravelAgencyCV.objects.get(pk=pk)
+    return render(request, 'hr/guest_cv_detail.html', {'cv': cv})
+
+
+
+# from clients.forms import TravelAgencyCVForm
+
+# @login_required
+# def guest_cv_detail(request, pk):
+#     if request.user.role != 'hr':
+#         return redirect('home')
+
+#     cv = get_object_or_404(TravelAgencyCV, pk=pk)
+
+#     # Optional: confirm this cv belongs to a guest
+#     if cv.user.role != 'guest':
+#         return redirect('home')
+
+#     if request.method == 'POST':
+#         form = TravelAgencyCVForm(request.POST, request.FILES, instance=cv)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'CV updated successfully.')
+#             return redirect('accounts:guest_cv_detail', pk=cv.pk)  # Or wherever you want to redirect
+#         else:
+#             messages.error(request, 'Please correct the errors below.')
+#     else:
+#         form = TravelAgencyCVForm(instance=cv)
+
+#     return render(request, 'hr/guest_cv_edit.html', {'form': form, 'cv': cv})

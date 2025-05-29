@@ -1,0 +1,14 @@
+{% extends 'accounts/dashboard.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Register Passport Information</h2>
+
+    <form method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {% crispy form %}
+        <button type="submit" class="btn btn-primary mt-3">Save Passport Info</button>
+    </form>
+</div>
+{% endblock %}

@@ -114,3 +114,28 @@ class TravelAgencyCV(models.Model):
 
     def __str__(self):
         return f"{self.full_name}'s CV"
+
+
+
+
+
+class PassportInfo(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='passport_info')
+    
+    passport_number = models.CharField(max_length=20)
+    full_name = models.CharField(max_length=200)
+    date_of_birth = models.DateField()
+    place_of_birth = models.CharField(max_length=100)
+    nationality = models.CharField(max_length=100, default='Bangladeshi')
+    gender = models.CharField(max_length=10, choices=[('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')])
+    father_name = models.CharField(max_length=200)
+    mother_name = models.CharField(max_length=200)
+    spouse_name = models.CharField(max_length=200, blank=True, null=True)
+    issue_date = models.DateField()
+    expiry_date = models.DateField()
+    place_of_issue = models.CharField(max_length=100)
+    passport_photo = models.ImageField(upload_to='passport_photos/', null=True, blank=True)
+    signature = models.ImageField(upload_to='signatures/', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.phone_number}'s Passport Info"

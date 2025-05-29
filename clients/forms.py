@@ -1,5 +1,5 @@
 from django import forms
-from .models import TravelAgencyCV, Language
+from .models import TravelAgencyCV, Language, PassportInfo
 from django_select2.forms import Select2TagWidget
 
 class TravelAgencyCVForm(forms.ModelForm):
@@ -42,4 +42,20 @@ class TravelAgencyCVForm(forms.ModelForm):
             'current_job_status_other': forms.TextInput(attrs={'class': 'form-control'}),
             'current_job_title': forms.TextInput(attrs={'class': 'form-control'}),
             'profile_picture': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+
+
+class PassportInfoForm(forms.ModelForm):
+    class Meta:
+        model = PassportInfo
+        fields = [
+            'passport_number', 'full_name', 'date_of_birth', 'place_of_birth', 
+            'nationality', 'gender', 'father_name', 'mother_name', 
+            'spouse_name', 'issue_date', 'expiry_date', 'place_of_issue', 
+            'passport_photo', 'signature'
+        ]
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            'issue_date': forms.DateInput(attrs={'type': 'date'}),
+            'expiry_date': forms.DateInput(attrs={'type': 'date'}),
         }
