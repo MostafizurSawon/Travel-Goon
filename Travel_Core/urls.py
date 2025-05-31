@@ -23,12 +23,13 @@ from accounts.views import LogoutGetAllowedView
 from . import views
 
 urlpatterns = [
+    path('', include('site_settings.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('clients/', include('clients.urls')),
     # path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('logout/', LogoutGetAllowedView.as_view(next_page='/accounts/guest-login/'), name='logout'),
-    path('', views.home, name='home'),  
+    
 ]
 
 if settings.DEBUG:

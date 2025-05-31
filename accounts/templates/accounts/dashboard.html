@@ -83,36 +83,30 @@
 <div class="sidebar d-flex flex-column">
     <h3 class="text-center">Travel Core</h3>
     <nav class="nav flex-column mt-4 flex-grow-1">
-        <!-- Show Admin Panel link only to users with role 'admin' -->
+        <!-- Admin Access -->
         {% if request.user.role == 'admin' %}
             <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
+            <a class="nav-link" href="{% url 'site_settings' %}">Site Settings</a>
+            <a class="nav-link" href="{% url 'media_upload' %}">Media Upload</a>
         {% endif %}
 
-        <!-- Hr Access -->
+        <!-- HR Access -->
         {% if request.user.role == 'hr' %}
             <a class="nav-link" href="{% url 'accounts:hr_dashboard' %}">Hr Menu</a>
             <a class="nav-link" href="{% url 'clients:register_passport_info' %}">Add Client Info (Passport)</a>
-       
             <a href="{% url 'accounts:hr_guest_passports' %}" class="nav-link">View Guests Passport Info</a>
             <a href="{% url 'accounts:hr_guest_cvs_list' %}" class="nav-link">View Guests CV Info</a>
-
-
         {% endif %}
 
-        
+        <!-- Guest Access -->
         <a class="nav-link" href="{% url 'accounts:guest_dashboard' %}">Guest Dashboard</a>
         <a class="nav-link" href="{% url 'clients:guest_cv' %}">Create/Update a CV</a>
         {% if request.user.cv %}
             <a class="nav-link" href="{% url 'accounts:guest_cv' %}">View CV</a>
         {% endif %}
-        
-        
     </nav>
+
     <div class="mt-auto p-3">
-        <a href="{% url 'accounts:guest_change_password' %}" class="btn btn-outline-success w-100">
-            Site Settings
-        </a>
-        <br>
         <a href="{% url 'accounts:guest_change_password' %}" class="btn btn-outline-success w-100">
             Change Password
         </a>
@@ -122,6 +116,7 @@
         </form>
     </div>
 </div>
+
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom">

@@ -1,0 +1,53 @@
+{% load static %}
+<footer>
+        <div class="footer-main max-width-site">
+
+            <div class="footer-menu-container">
+                <a class="category-card-image" href="index.html">
+                    <img class="logo" src="{% static 'assets/logo/logo.png' %}" alt="logo">
+                </a>
+
+                <div class="menu-footer-logo">
+                    <p>Your trusted agency for flights, hotels, tours, and seamless travel solutions.</p>
+                </div>
+            </div>
+            <div class="footer-menu-container">
+                <h1>Other Pages</h1>
+                <div class="menu-footer">
+                    <a href="{% url 'home' %}">Home</a>
+                    <a href="{% url 'about' %}">About</a>
+                    <a href="{% url 'services' %}">Services</a>
+                    <a href="{% url 'contact' %}">Contact</a>
+                </div>
+            </div>
+            <div class="footer-menu-container">
+                <h1>Social Media</h1>
+                <div class="menu-footer-social">
+                    <a><i class="fa-brands fa-facebook facebook-icon"></i></a>
+                    <a><i class="fa-brands fa-youtube youtube-icon"></i></a>
+                    <a><i class="fa-brands fa-square-instagram instagram-icon"></i></a>
+                    <a><i class="fa-brands fa-square-x-twitter twitter-icon"></i></a>
+                </div>
+            </div>
+            <div class="footer-menu-container">
+                <h1>Contact</h1>
+                <div class="menu-footer">
+                    <a>example@exple.com</a>
+                    <a>+8809643240103</a>
+                    <a>House 454, Road No: 31</a>
+                    <a>Mohakhali DOHS, Dhaka</a>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-footer max-width-site">
+            <div class="footer footer-center text-white py-2 text-center ">
+                <aside>
+                    <p>
+                        Copyright © <span id="year"></span> Go On TravelDesk.Design and Developed by
+                        <a class="JBD" target="_blank" rel="noopener noreferrer" href="https://jbdit.com.bd">JBD IT</a>
+                    </p>
+                </aside>
+            </div>
+
+        </div>
+    </footer>

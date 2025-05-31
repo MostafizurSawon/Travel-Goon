@@ -16,13 +16,14 @@ class TravelAgencyCVForm(forms.ModelForm):
         widgets = {
             'full_name': forms.TextInput(attrs={'class': 'form-control'}),
             'full_name_bn': forms.TextInput(attrs={'class': 'form-control'}),
-            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),  # Add bio here
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}), 
             'blood_group': forms.Select(attrs={'class': 'form-select'}),
             'blood_group_other': forms.TextInput(attrs={'class': 'form-control'}),
             'language_other': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'nationality': forms.TextInput(attrs={'class': 'form-control'}),
+            'national_id': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'National ID'}),
             'current_address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'is_permanent_same_as_current': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'permanent_address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),

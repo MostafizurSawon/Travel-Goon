@@ -56,6 +56,7 @@ class TravelAgencyCV(models.Model):
 
     bio = models.TextField(blank=True, help_text="A brief introduction about yourself")
 
+
     # Blood Group
     blood_group = models.CharField(max_length=10, choices=BLOOD_GROUP_CHOICES, default='Other')
     blood_group_other = models.CharField(max_length=20, blank=True, help_text="If Other, specify here")
@@ -72,6 +73,7 @@ class TravelAgencyCV(models.Model):
     email = models.EmailField()
     date_of_birth = models.DateField()
     nationality = models.CharField(max_length=100)
+    national_id = models.IntegerField(unique=True, help_text="National ID", blank=True, null=True)
 
     # Addresses
     current_address = models.TextField()
